@@ -47,30 +47,6 @@
             padding: 2rem;
         }
 
-        .form-control {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 16px;
-            background: rgba(248, 250, 252, 0.8);
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
-            background: white;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            border: none;
-            border-radius: 12px;
-            padding: 12px;
-            font-weight: 600;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
         .btn-github {
             background: linear-gradient(135deg, #24292e, #4a5568);
             border: none;
@@ -101,36 +77,6 @@
             font-weight: 500;
         }
 
-        .divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            color: var(--secondary-color);
-            font-size: 14px;
-        }
-
-        .test-users {
-            background: rgba(248, 250, 252, 0.8);
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-        }
     </style>
 </head>
 <body>
@@ -145,49 +91,48 @@
             <div th:if="${param.error}" class="error-message">
                 Usuário ou senha incorretos. Tente novamente.
             </div>
-
-            <!-- Login com GitHub -->
-            <a href="/oauth2/authorization/github" class="btn btn-github">
-                🐙 Entrar com GitHub
-            </a>
-
-            <!-- Divisor -->
-            <div class="divider">
-                <span>ou</span>
+            
+            <!-- Mensagem de logout sucesso -->
+            <div th:if="${param.logout}" class="alert alert-success" style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); margin-bottom: 1rem;">
+                Logout realizado com sucesso!
             </div>
 
-            <!-- Formulário tradicional -->
-            <form th:action="@{/login}" method="post">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Usuário</label>
-                    <input type="text" class="form-control" name="username" placeholder="Digite seu usuário" required>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Senha</label>
-                    <input type="password" class="form-control" name="password" placeholder="Digite sua senha" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary">
-                    Entrar no Sistema
-                </button>
-            </form>
-
-            <!-- Usuários de teste -->
-            <div class="test-users">
-                <h6 class="mb-2 text-muted">👥 Usuários de Teste</h6>
-                <div class="row">
-                    <div class="col-6">
-                        <small><strong>Admin:</strong></small><br>
-                        <small class="text-muted">matheus/123</small>
-                    </div>
-                    <div class="col-6">
-                        <small><strong>Usuário:</strong></small><br>
-                        <small class="text-muted">zoog/zoog123</small>
-                    </div>
-                </div>
+            <!-- Login com GitHub -->
+            <a href="/oauth2/authorization/github" class="btn btn-github mb-3">
+                🐙 Entrar com GitHub
+            </a>
+            
+            <div class="text-center">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i> 
+                    Use sua conta GitHub para acessar o sistema
+                </small>
+            </div>
+            
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    Seguro • Rápido • Confiável
+                </small>
             </div>
         </div>
     </div>
+    
+    <script>
+        // Limpa dados de sessão quando há logout
+        if (window.location.search.includes('logout=true')) {
+            // Limpar localStorage e sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Forçar limpeza de cache se possível
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                });
+            }
+        }
+    </script>
 </body>
 </html>

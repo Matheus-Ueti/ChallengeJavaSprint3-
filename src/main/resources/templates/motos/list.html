@@ -46,6 +46,31 @@
             color: var(--primary-color) !important;
         }
         
+        .logout-btn {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            background: none !important;
+            border: none !important;
+            text-decoration: none !important;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.1) !important;
+            color: var(--danger-color) !important;
+        }
+        
+        .user-avatar {
+            border: 2px solid rgba(37, 99, 235, 0.3);
+            transition: border-color 0.3s ease;
+        }
+        
+        .user-info:hover .user-avatar {
+            border-color: var(--primary-color);
+        }
+        
         .main-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -227,7 +252,20 @@
                     <a class="nav-link active" href="/motos">Gestão de Motos</a>
                     <a class="nav-link" href="/usuario">Perfil</a>
                     <a class="nav-link" href="/sobre">Sobre</a>
-                    <a class="nav-link" href="/login">Sair</a>
+                    
+                    <!-- Avatar do usuário GitHub (se logado via OAuth2) -->
+                    <div th:if="${userAvatar}" class="nav-link d-flex align-items-center user-info">
+                        <img th:src="${userAvatar}" 
+                             th:alt="${userName}" 
+                             class="rounded-circle me-2 user-avatar" 
+                             style="width: 32px; height: 32px;">
+                        <span th:text="${userName ?: userLogin}" class="text-truncate" style="max-width: 100px;"></span>
+                    </div>
+                    
+                    <!-- Botão de logout -->
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="logout-btn">Sair</button>
+                    </form>
                 </div>
             </div>
         </div>
