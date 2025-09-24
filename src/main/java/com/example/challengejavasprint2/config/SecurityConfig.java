@@ -20,13 +20,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/home", "/h2-console/**").permitAll()
+                .requestMatchers("/", "/home", "/h2-console/**", "/motos/**", "/sobre", "/usuario", "/painel").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/users", true)
+                .defaultSuccessUrl("/", true)
                 .permitAll()
             )
             .logout(logout -> logout
@@ -41,19 +41,19 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("admin"))
-            .roles("ADMIN")
+        UserDetails matheus = User.builder()
+            .username("matheus")
+            .password(passwordEncoder().encode("123"))
+            .roles("ADMIN", "GERENTE")
             .build();
 
-        UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder().encode("user"))
+        UserDetails zoog = User.builder()
+            .username("zoog")
+            .password(passwordEncoder().encode("zoog123"))
             .roles("USER")
             .build();
 
-        return new InMemoryUserDetailsManager(admin, user);
+        return new InMemoryUserDetailsManager(matheus, zoog);
     }
 
     @Bean
