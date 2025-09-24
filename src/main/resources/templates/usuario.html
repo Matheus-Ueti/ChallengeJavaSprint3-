@@ -4,59 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Usuário - Zoog</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-modern {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color) !important;
+        }
+        
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            border: none;
+            padding: 2rem;
+        }
+        
+        .card-body {
+            padding: 2.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.75rem;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+        
+        .btn-modern {
+            border-radius: 12px;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+        }
+        
+        .btn-primary-modern {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .card-header {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-modern">
         <div class="container">
-            <a class="navbar-brand" href="/">🏍️ Zoog</a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/">Painel</a>
-                <a class="nav-link" href="/motos">Gestão de Motos</a>
-                <a class="nav-link" href="/usuario">Perfil</a>
-                <a class="nav-link" href="/login">Sair</a>
+            <a class="navbar-brand" href="/">ZOOG</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/">Painel</a>
+                    <a class="nav-link" href="/motos">Gestão de Motos</a>
+                    <a class="nav-link active" href="/usuario">Perfil</a>
+                    <a class="nav-link" href="/sobre">Sobre</a>
+                    <a class="nav-link" href="/login">Sair</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h1>Perfil do Usuário</h1>
-                
-                <div class="card">
+            <div class="col-lg-8">
+                <div class="card main-card">
+                    <div class="card-header">
+                        <h2 class="mb-0">Perfil do Usuário</h2>
+                        <p class="mb-0 mt-2 opacity-75">Informações do seu perfil no sistema</p>
+                    </div>
                     <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Nome:</strong></label>
-                            <input type="text" class="form-control" value="Matheus Muruera" readonly>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Nome:</label>
+                                <input type="text" class="form-control" value="Matheus Muruera" readonly>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Email:</label>
+                                <input type="email" class="form-control" value="matheusueiti@gmail.com" readonly>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Telefone:</label>
+                                <input type="tel" class="form-control" value="(15) 99812-5180" readonly>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Cargo:</label>
+                                <select class="form-select" disabled>
+                                    <option selected>Gerente de Frota</option>
+                                </select>
+                            </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Email:</strong></label>
-                            <input type="email" class="form-control" value="matheusueiti@gmail.com" readonly>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Telefone:</strong></label>
-                            <input type="tel" class="form-control" value="(15) 99812-5180" readonly>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Cargo:</strong></label>
-                            <select class="form-select" disabled>
-                                <option selected>Gerente de Frota</option>
-                            </select>
+                        <div class="d-flex justify-content-center mt-4">
+                            <a href="/" class="btn btn-primary-modern btn-modern">
+                                Voltar ao Painel
+                            </a>
                         </div>
                     </div>
-                </div>
-                
-                <div class="mt-3 d-grid">
-                    <a href="/" class="btn btn-primary">Voltar</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -23,10 +23,10 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/h2-console/**", "/motos/**", "/sobre", "/usuario", "/painel").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
+            )            .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
