@@ -15,7 +15,7 @@
             --dark-color: #1e293b;
             --light-color: #f8fafc;
         }
-        
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -23,162 +23,171 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
-            padding: 20px;
         }
-        
-        .login-container {
-            width: 100%;
-            max-width: 450px;
-        }
-        
+
         .login-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             width: 100%;
+            max-width: 420px;
         }
-        
+
         .login-header {
             background: linear-gradient(135deg, var(--primary-color), #3b82f6);
             color: white;
             padding: 2rem;
             text-align: center;
         }
-        
+
         .login-body {
-            padding: 2.5rem;
+            padding: 2rem;
         }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 0.75rem;
-        }
-        
+
         .form-control {
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 0.875rem 1rem;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.8);
+            padding: 12px 16px;
+            font-size: 16px;
+            background: rgba(248, 250, 252, 0.8);
         }
-        
+
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
             background: white;
         }
-        
-        .btn-modern {
-            border-radius: 12px;
-            padding: 0.875rem 2rem;
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            width: 100%;
-        }
-        
-        .btn-primary-modern {
+
+        .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), #3b82f6);
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
-        }
-        
-        .btn-secondary-modern {
-            background: var(--secondary-color);
-            color: white;
-        }
-          .login-info {
-            background: rgba(37, 99, 235, 0.1);
+            border: none;
             border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1rem;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 1rem;
         }
-        
+
+        .btn-github {
+            background: linear-gradient(135deg, #24292e, #4a5568);
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn-github:hover {
+            background: linear-gradient(135deg, #1a1e22, #3a454f);
+            color: white;
+            text-decoration: none;
+        }
+
         .error-message {
             background: rgba(239, 68, 68, 0.1);
-            border: 2px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        .test-users {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 1rem;
-            margin-bottom: 1rem;
-            color: var(--danger-color);
-            font-weight: 600;
-        }
-        
-        .brand-logo {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        @media (max-width: 768px) {
-            .login-body {
-                padding: 1.5rem;
-            }
-            
-            .login-header {
-                padding: 1.5rem;
-            }
-            
-            body {
-                padding: 10px;
-            }
+            margin-top: 1.5rem;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <div class="brand-logo">ZOOG</div>
-                <h2 class="mb-0">Login</h2>
-                <p class="mb-0 mt-2 opacity-75">Sistema de Gestão de Motos</p>
-            </div>            <div class="login-body">
-                <!-- Mensagem de erro -->
-                <div th:if="${param.error}" class="error-message">
-                    Usuário ou senha incorretos. Tente novamente.
+    <div class="login-card">
+        <div class="login-header">
+            <h3 class="mb-0">🏍️ Zoog Login</h3>
+            <p class="mb-0 mt-2 opacity-75">Sistema de Gestão de Motos</p>
+        </div>
+        
+        <div class="login-body">
+            <!-- Mensagem de erro -->
+            <div th:if="${param.error}" class="error-message">
+                Usuário ou senha incorretos. Tente novamente.
+            </div>
+
+            <!-- Login com GitHub -->
+            <a href="/oauth2/authorization/github" class="btn btn-github">
+                🐙 Entrar com GitHub
+            </a>
+
+            <!-- Divisor -->
+            <div class="divider">
+                <span>ou</span>
+            </div>
+
+            <!-- Formulário tradicional -->
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Usuário</label>
+                    <input type="text" class="form-control" name="username" placeholder="Digite seu usuário" required>
                 </div>
                 
-                <form th:action="@{/login}" method="post">
-                    <div class="mb-4">
-                        <label for="username" class="form-label">
-                            Usuário
-                        </label>
-                        <input type="text" class="form-control" id="username" name="username" 
-                               placeholder="Digite seu usuário" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password" class="form-label">
-                            Senha
-                        </label>
-                        <input type="password" class="form-control" id="password" name="password" 
-                               placeholder="Digite sua senha" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary-modern btn-modern mb-3">
-                        Entrar no Sistema
-                    </button>
-                </form>
-                
-                <div class="login-info">
-                    <h6 class="mb-2">
-                        Usuários de Teste
-                    </h6>
-                    <p class="mb-1 small"><strong>Admin:</strong> matheus/123</p>
-                    <p class="mb-0 small"><strong>Usuário:</strong> zoog/zoog123</p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Senha</label>
+                    <input type="password" class="form-control" name="password" placeholder="Digite sua senha" required>
                 </div>
                 
-                <div class="text-center mt-3">
-                    <a href="/" class="btn btn-secondary-modern btn-modern">
-                        Voltar ao Início
-                    </a>
+                <button type="submit" class="btn btn-primary">
+                    Entrar no Sistema
+                </button>
+            </form>
+
+            <!-- Usuários de teste -->
+            <div class="test-users">
+                <h6 class="mb-2 text-muted">👥 Usuários de Teste</h6>
+                <div class="row">
+                    <div class="col-6">
+                        <small><strong>Admin:</strong></small><br>
+                        <small class="text-muted">matheus/123</small>
+                    </div>
+                    <div class="col-6">
+                        <small><strong>Usuário:</strong></small><br>
+                        <small class="text-muted">zoog/zoog123</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

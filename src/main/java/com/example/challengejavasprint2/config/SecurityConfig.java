@@ -23,11 +23,19 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/h2-console/**", "/motos/**", "/sobre", "/usuario", "/painel").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-            )            .formLogin(form -> form
+            )
+            // Login tradicional
+            .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
+            )
+            // OAuth2 Login (GitHub)
+            .oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
             )
             .logout(logout -> logout
                 .logoutSuccessUrl("/")
