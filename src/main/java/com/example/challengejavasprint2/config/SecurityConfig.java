@@ -18,9 +18,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/home", "/h2-console/**", "/motos/**", "/sobre", "/usuario", "/painel").permitAll()
+        http            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/", "/login", "/h2-console/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -47,25 +46,5 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails matheus = User.builder()
-            .username("matheus")
-            .password(passwordEncoder().encode("123"))
-            .roles("ADMIN", "GERENTE")
-            .build();
 
-        UserDetails zoog = User.builder()
-            .username("zoog")
-            .password(passwordEncoder().encode("zoog123"))
-            .roles("USER")
-            .build();
-
-        return new InMemoryUserDetailsManager(matheus, zoog);
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
