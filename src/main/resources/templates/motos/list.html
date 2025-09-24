@@ -60,14 +60,13 @@
                     </thead>
                     <tbody>
                         <tr th:each="moto : ${motos}" th:class="'status-' + ${#strings.toLowerCase(moto.status)}">
-                            <td th:text="${moto.modelo}">Honda CG 160</td>
-                            <td th:text="${moto.placa}">ABC-1234</td>
+                            <td th:text="${moto.modelo != null ? moto.modelo : '---'}">Honda CG 160</td>
+                            <td th:text="${moto.placa != null ? moto.placa : '---'}">ABC-1234</td>
                             <td>
-                                <span th:class="'badge ' + (${moto.status == 'DISPONIVEL'} ? 'bg-success' : 
-                                                           ${moto.status == 'EM_USO'} ? 'bg-warning' : 'bg-danger')"
-                                      th:text="${moto.status}">DISPONIVEL</span>
+                                <span th:class="'badge ' + (moto.status == 'DISPONIVEL' ? 'bg-success' : (moto.status == 'EM_USO' ? 'bg-warning' : 'bg-danger'))"
+                                      th:text="${moto.status != null ? moto.status : '---'}">DISPONIVEL</span>
                             </td>
-                            <td th:text="${#temporals.format(moto.createdAt, 'dd/MM/yyyy HH:mm')}">24/09/2025 11:54</td>
+                            <td th:text="${moto.createdAt != null ? #temporals.format(moto.createdAt, 'dd/MM/yyyy HH:mm') : '---'}">24/09/2025 11:54</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <a th:href="@{/motos/edit/{id}(id=${moto.id})}" class="btn btn-warning">Editar</a>
