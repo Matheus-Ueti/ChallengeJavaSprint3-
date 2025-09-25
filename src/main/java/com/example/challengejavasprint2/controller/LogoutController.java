@@ -38,12 +38,10 @@ public class LogoutController {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         
-        // Limpa completamente a sessão
         if (request.getSession(false) != null) {
             request.getSession().invalidate();
         }
         
-        // Redireciona para a página de login com mensagem de logout
         return "redirect:/login?logout=true";
     }
 }

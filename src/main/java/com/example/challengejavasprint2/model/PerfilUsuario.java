@@ -38,9 +38,4 @@ public class PerfilUsuario {
     @Column(name = "cargo")
     private String cargo;
     
-    // Construtor customizado
-    public PerfilUsuario(String githubUsername, String nomeCompleto) {
-        this.githubUsername = githubUsername;
-        this.nomeCompleto = nomeCompleto;
-    }
 }

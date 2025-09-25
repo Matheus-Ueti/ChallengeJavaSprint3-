@@ -13,6 +13,11 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
+//adicionado para evitar erro de parametros CLAUDE no 
+//as vezes na hora que eu entrava na gestao de motos aparecia um erro gigante, adicionando esse copileJava ele sumiu
+compileJava {
+	options.compilerArgs << '-parameters'
+}
 
 configurations {
 	compileOnly {
