@@ -123,6 +123,28 @@
             background: white;
         }
         
+        .form-control.is-valid {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .form-control.is-invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+        
+        .placa-validation-container {
+            position: relative;
+        }
+        
+        .validation-icon {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        
         .btn {
             border-radius: 12px;
             padding: 0.875rem 2rem;
@@ -180,6 +202,12 @@
         
         .form-control.with-icon {
             padding-left: 3rem;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
         
         @media (max-width: 768px) {
@@ -248,9 +276,21 @@
                                 <label for="placa" class="form-label">
                                     Placa da Motocicleta
                                 </label>
-                                <input type="text" class="form-control" th:field="*{placa}" id="placa" 
-                                       placeholder="AAA-0000" maxlength="8" style="text-transform: uppercase;">
+                                <div class="position-relative">
+                                    <input type="text" class="form-control" th:field="*{placa}" id="placa" 
+                                           placeholder="AAA-0000" maxlength="8" style="text-transform: uppercase;">
+                                    <div id="placa-loading" class="position-absolute top-50 end-0 translate-middle-y me-3" style="display: none;">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                    </div>
+                                    <div id="placa-check" class="position-absolute top-50 end-0 translate-middle-y me-3" style="display: none;">
+                                        <i class="fas fa-check text-success"></i>
+                                    </div>
+                                    <div id="placa-error-icon" class="position-absolute top-50 end-0 translate-middle-y me-3" style="display: none;">
+                                        <i class="fas fa-times text-danger"></i>
+                                    </div>
+                                </div>
                                 <small class="text-muted">Formato: ABC-1234</small>
+                                <div id="placa-validation-message" class="text-success mt-1" style="display: none; font-size: 0.875rem;"></div>
                                 <div th:if="${#fields.hasErrors('placa')}" class="text-danger">
                                     <span th:each="error : ${#fields.errors('placa')}" th:text="${error}"></span>
                                 </div>
@@ -322,14 +362,77 @@
         </div>
     </div>    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Formatação automática da placa
-        document.getElementById('placa').addEventListener('input', function(e) {
+        // Formatação automática da placa e validação em tempo real
+        let placaTimeout;
+        const placaInput = document.getElementById('placa');
+        const placaLoading = document.getElementById('placa-loading');
+        const placaCheck = document.getElementById('placa-check');
+        const placaErrorIcon = document.getElementById('placa-error-icon');
+        const placaMessage = document.getElementById('placa-validation-message');
+        const motoId = document.querySelector('input[name="id"]').value;
+        
+        placaInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
             if (value.length > 3) {
                 value = value.substring(0, 3) + '-' + value.substring(3, 7);
             }
             e.target.value = value;
+            
+            // Limpar timeout anterior
+            clearTimeout(placaTimeout);
+            
+            // Resetar indicadores visuais
+            hideAllPlacaIndicators();
+            
+            // Se a placa tem formato válido, fazer verificação
+            if (value.length === 8 && value.includes('-')) {
+                placaLoading.style.display = 'block';
+                
+                placaTimeout = setTimeout(() => {
+                    verificarPlacaDisponibilidade(value, motoId);
+                }, 500); // Aguarda 500ms após parar de digitar
+            }
         });
+        
+        function hideAllPlacaIndicators() {
+            placaLoading.style.display = 'none';
+            placaCheck.style.display = 'none';
+            placaErrorIcon.style.display = 'none';
+            placaMessage.style.display = 'none';
+            placaInput.classList.remove('is-valid', 'is-invalid');
+        }
+        
+        function verificarPlacaDisponibilidade(placa, motoId) {
+            const url = `/motos/verificar-placa?placa=${encodeURIComponent(placa)}${motoId ? `&motoId=${motoId}` : ''}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    placaLoading.style.display = 'none';
+                    
+                    if (data.existe) {
+                        // Placa já existe
+                        placaErrorIcon.style.display = 'block';
+                        placaInput.classList.add('is-invalid');
+                        placaInput.classList.remove('is-valid');
+                        placaMessage.textContent = data.mensagem;
+                        placaMessage.className = 'text-danger mt-1';
+                        placaMessage.style.display = 'block';
+                    } else {
+                        // Placa disponível
+                        placaCheck.style.display = 'block';
+                        placaInput.classList.add('is-valid');
+                        placaInput.classList.remove('is-invalid');
+                        placaMessage.textContent = data.mensagem;
+                        placaMessage.className = 'text-success mt-1';
+                        placaMessage.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao verificar placa:', error);
+                    placaLoading.style.display = 'none';
+                });
+        }
         
         // Animação de focus nos inputs
         document.querySelectorAll('.form-control, .form-select').forEach(input => {
@@ -371,16 +474,64 @@
         
         // Validação visual em tempo real
         document.querySelectorAll('.form-control, .form-select').forEach(input => {
-            input.addEventListener('input', function() {
-                if (this.value.trim() !== '') {
-                    this.classList.add('is-valid');
-                    this.classList.remove('is-invalid');
-                } else if (this.required) {
-                    this.classList.add('is-invalid');
-                    this.classList.remove('is-valid');
-                }
-            });
+            if (input.id !== 'placa') { // Não aplicar para placa pois já tem validação específica
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        this.classList.add('is-valid');
+                        this.classList.remove('is-invalid');
+                    } else if (this.required) {
+                        this.classList.add('is-invalid');
+                        this.classList.remove('is-valid');
+                    }
+                });
+            }
         });
+        
+        // Validação no submit do formulário
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const placaInput = document.getElementById('placa');
+            
+            // Verificar se a placa está marcada como inválida
+            if (placaInput.classList.contains('is-invalid')) {
+                e.preventDefault();
+                
+                // Mostrar alerta personalizado
+                showAlert('Erro de Validação', 'Por favor, corrija os erros antes de continuar. A placa informada já está cadastrada no sistema.', 'error');
+                
+                // Focar no campo da placa
+                placaInput.focus();
+                
+                // Adicionar efeito visual
+                placaInput.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    placaInput.style.animation = '';
+                }, 500);
+                
+                return false;
+            }
+        });
+        
+        // Função para mostrar alertas personalizados
+        function showAlert(title, message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            
+            alertDiv.innerHTML = `
+                <strong>${title}</strong><br>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Remover automaticamente após 5 segundos
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
     </script>
 </body>
 </html>

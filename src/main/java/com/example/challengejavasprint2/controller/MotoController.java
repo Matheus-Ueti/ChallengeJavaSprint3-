@@ -1,6 +1,9 @@
 package com.example.challengejavasprint2.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.challengejavasprint2.model.Moto;
 import com.example.challengejavasprint2.model.PerfilUsuario;
@@ -51,11 +55,16 @@ public class MotoController {
     }
 
     @GetMapping("/motos")
-    public String listMotos(Model model, @RequestParam(value = "status", required = false) String status, Authentication authentication) {
+    public String listMotos(Model model, @RequestParam(name = "status", required = false) String status, 
+                           @RequestParam(name = "sucesso", required = false) String sucesso, Authentication authentication) {
         if (status != null && !status.isEmpty()) {
             model.addAttribute("motos", motoRepository.findByStatus(status));
         } else {
             model.addAttribute("motos", motoRepository.findAll());
+        }
+        
+        if (sucesso != null) {
+            model.addAttribute("sucesso", true);
         }
         
         GithubUserModelHelper.addGithubUserInfo(model, authentication);
@@ -70,7 +79,7 @@ public class MotoController {
     }
 
     @GetMapping("/motos/edit/{id}")
-    public String editMoto(@PathVariable Long id, Model model, Authentication authentication) {
+    public String editMoto(@PathVariable(name = "id") Long id, Model model, Authentication authentication) {
         Moto moto = motoRepository.findById(id).orElse(null);
         if (moto == null) {
             return "redirect:/motos";
@@ -82,16 +91,36 @@ public class MotoController {
 
     @PostMapping("/motos/save")
     public String saveMoto(@Valid @ModelAttribute Moto moto, BindingResult result, Model model, Authentication authentication) {
+        // Validação de placa duplicada
+        if (moto.getPlaca() != null && !moto.getPlaca().trim().isEmpty()) {
+            String placaFormatada = moto.getPlaca().trim().toUpperCase();
+            moto.setPlaca(placaFormatada);
+            
+            boolean placaJaExiste = false;
+            if (moto.getId() == null) {
+                // Nova moto - verificar se placa já existe
+                placaJaExiste = motoRepository.existsByPlaca(placaFormatada);
+            } else {
+                // Editando moto - verificar se placa já existe em outra moto
+                placaJaExiste = motoRepository.countByPlacaAndIdNot(placaFormatada, moto.getId()) > 0;
+            }
+            
+            if (placaJaExiste) {
+                result.rejectValue("placa", "error.moto", "Esta placa já está cadastrada no sistema");
+            }
+        }
+        
         if (result.hasErrors()) {
             GithubUserModelHelper.addGithubUserInfo(model, authentication);
             return "motos/form";
         }
+        
         motoRepository.save(moto);
-        return "redirect:/motos";
+        return "redirect:/motos?sucesso=true";
     }
 
     @GetMapping("/motos/delete/{id}")
-    public String deleteMoto(@PathVariable Long id) {
+    public String deleteMoto(@PathVariable(name = "id") Long id) {
         motoRepository.deleteById(id);
         return "redirect:/motos";
     }
@@ -139,7 +168,7 @@ public class MotoController {
     }
 
     @PostMapping("/usuario/salvar")
-    public String salvarPerfil(@ModelAttribute PerfilUsuario perfil, Authentication authentication) {
+    public String salvarPerfil(@ModelAttribute("perfil") PerfilUsuario perfil, Authentication authentication) {
         String githubUsername = GithubUserModelHelper.getGithubUsername(authentication);
         String githubName = GithubUserModelHelper.getGithubName(authentication);
 
@@ -153,5 +182,26 @@ public class MotoController {
     @GetMapping("/painel")
     public String painel(Model model, Authentication authentication) {
         return home(model, authentication);
+    }
+    
+    @GetMapping("/motos/verificar-placa")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> verificarPlaca(@RequestParam(name = "placa") String placa, 
+                                                            @RequestParam(name = "motoId", required = false) Long motoId) {
+        String placaFormatada = placa.trim().toUpperCase();
+        boolean placaJaExiste = false;
+        
+        if (motoId == null) {
+            // Nova moto
+            placaJaExiste = motoRepository.existsByPlaca(placaFormatada);
+        } else {
+            // Editando moto existente
+            placaJaExiste = motoRepository.countByPlacaAndIdNot(placaFormatada, motoId) > 0;
+        }
+        
+        return ResponseEntity.ok(Map.of(
+            "existe", placaJaExiste,
+            "mensagem", placaJaExiste ? "Esta placa já está cadastrada no sistema" : "Placa disponível"
+        ));
     }
 }

@@ -38,4 +38,5 @@ public class PerfilUsuario {
     @Column(name = "cargo")
     private String cargo;
     
+    
 }
