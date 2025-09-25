@@ -1,10 +1,21 @@
 package com.example.challengejavasprint2.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "perfil_usuario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PerfilUsuario {
     
     @Id
@@ -27,60 +38,9 @@ public class PerfilUsuario {
     @Column(name = "cargo")
     private String cargo;
     
-    // Construtores
-    public PerfilUsuario() {}
-    
+    // Construtor customizado
     public PerfilUsuario(String githubUsername, String nomeCompleto) {
         this.githubUsername = githubUsername;
         this.nomeCompleto = nomeCompleto;
-    }
-    
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getGithubUsername() {
-        return githubUsername;
-    }
-    
-    public void setGithubUsername(String githubUsername) {
-        this.githubUsername = githubUsername;
-    }
-    
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
-    
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
-    
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getTelefone() {
-        return telefone;
-    }
-    
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-    
-    public String getCargo() {
-        return cargo;
-    }
-    
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
     }
 }
