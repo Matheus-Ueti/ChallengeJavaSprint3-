@@ -12,8 +12,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/login", "/h2-console/**").permitAll()
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/login", "/h2-console/**").permitAll() // Removido "/"
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
@@ -35,9 +36,7 @@ public class SecurityConfig {
             .headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions.disable())
             );
-        
+
         return http.build();
     }
-
-
 }
