@@ -196,3 +196,5 @@ Se houver problemas com migrations:
 
 **Versão da aplicação**: 0.0.1-SNAPSHOT  
 **Última atualização**: Setembro 2025
+
+**video**:https://youtu.be/7HKl4rCxgNE
