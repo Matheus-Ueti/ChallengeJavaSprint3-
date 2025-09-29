@@ -185,16 +185,7 @@ Se houver problemas com migrations:
 - ✅ Flyway migrations
 - ✅ Testes básicos
 
-
-## 👨‍💻 Autor
-
-**Matheus Ueti**
-- GitHub: [@Matheus-Ueti](https://github.com/Matheus-Ueti)
-
----
-
-
-**Versão da aplicação**: 0.0.1-SNAPSHOT  
-**Última atualização**: Setembro 2025
+## INTEGRANTES
+**Matheus Munuera Ueti- RM557812 Pedro Gomes - RM 553907 Luiz Felipe Abreu - RM 555197**
 
 **video**:https://youtu.be/7HKl4rCxgNE
