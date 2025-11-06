@@ -1,5 +1,5 @@
 
-FROM gradle:8.3.3-jdk17 AS builder
+FROM gradle:jdk17-alpine AS builder
 WORKDIR /home/gradle/project
 
 COPY --chown=gradle:gradle . .
