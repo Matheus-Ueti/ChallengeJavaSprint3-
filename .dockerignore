@@ -1,0 +1,16 @@
+build/
+.gradle/
+.idea/
+.vscode/
+.git/
+**/*.iml
+*.class
+*.log
+target/
+out/
+.DS_Store
+/.mvn
+/.settings
+env/
+tmp/
+node_modules/
